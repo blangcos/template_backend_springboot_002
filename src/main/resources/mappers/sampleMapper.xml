@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sample">
+
+	<!-- Sample List 조회 -->
+	<resultMap type="java.util.Map" id="sampleMap">
+		<result column="SAMPLE_KEY" property="sampleKey"/>
+		<result column="SAMPLE_CONTENTS" property="sampleContents"/>
+		<result column="SAMPLE_ORDER" property="sampleOrder"/>
+	</resultMap>
+	<select id="selectSampleList" resultMap="sampleMap">
+		SELECT	SAMPLE_KEY
+			,	SAMPLE_CONTENTS
+			,	SAMPLE_ORDER
+		FROM	SAMPLE_TABLE
+	</select>
+
+	<!-- Sample 생성 -->
+	<insert id="insertSample" parameterType="java.util.Map">
+		INSERT
+		INTO	SAMPLE_TABLE
+			(
+				SAMPLE_KEY
+			,	SAMPLE_CONTENTS
+			, 	SAMPLE_ORDER
+			)
+		SELECT	MAX(SAMPLE_KEY)+1
+			,	#{sampleContents}
+			,	#{sampleOrder}
+		FROM	SAMPLE_TABLE
+	</insert>
+	
+	<!-- Sample 수정 -->
+	<update id="updateSample" parameterType="String">
+		UPDATE	SAMPLE_TABLE
+		SET		SAMPLE_CONTENTS = CONCAT('Update! (', NOW(), ')')
+		WHERE	SAMPLE_KEY = #{sampleKey} 
+	</update>
+	
+	<!-- Sample 삭제 -->
+	<delete id="deleteSample"  parameterType="String">
+		DELETE	
+		FROM	SAMPLE_TABLE
+		WHERE	SAMPLE_KEY = #{sampleKey}
+	</delete>
+
+</mapper>
