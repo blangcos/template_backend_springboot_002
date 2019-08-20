@@ -12,27 +12,27 @@
 		SELECT	SAMPLE_KEY
 			,	SAMPLE_CONTENTS
 			,	SAMPLE_ORDER
-		FROM	SAMPLE_TABLE
+		FROM	SAMPLE_TABLES
 	</select>
 
 	<!-- Sample 생성 -->
-	<insert id="insertSample" parameterType="java.util.Map">
+	<insert id="insertSample" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="sample_key">
 		INSERT
-		INTO	SAMPLE_TABLE
+		INTO	SAMPLE_TABLES
 			(
-				SAMPLE_KEY
-			,	SAMPLE_CONTENTS
+				SAMPLE_CONTENTS
 			, 	SAMPLE_ORDER
 			)
-		SELECT	MAX(SAMPLE_KEY)+1
-			,	#{sampleContents}
+		VALUES
+			(
+				#{sampleContents}
 			,	#{sampleOrder}
-		FROM	SAMPLE_TABLE
+			)
 	</insert>
 	
 	<!-- Sample 수정 -->
 	<update id="updateSample" parameterType="String">
-		UPDATE	SAMPLE_TABLE
+		UPDATE	SAMPLE_TABLES
 		SET		SAMPLE_CONTENTS = CONCAT('Update! (', NOW(), ')')
 		WHERE	SAMPLE_KEY = #{sampleKey} 
 	</update>
@@ -40,7 +40,7 @@
 	<!-- Sample 삭제 -->
 	<delete id="deleteSample"  parameterType="String">
 		DELETE	
-		FROM	SAMPLE_TABLE
+		FROM	SAMPLE_TABLES
 		WHERE	SAMPLE_KEY = #{sampleKey}
 	</delete>
 
